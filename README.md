@@ -1,4 +1,4 @@
-# Webassembly Component Tutorial
+# WebAssembly Component Tutorial
 
 This tutorial walks you through building, composing, and running a small component-model calculator example. The example uses four components:
 
