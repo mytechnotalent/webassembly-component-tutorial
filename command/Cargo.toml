@@ -14,3 +14,4 @@ world = "app"
 
 [package.metadata.component.target.dependencies]
 "docs:adder" = { path = "../wit/adder" }
+"docs:subtractor" = { path = "../wit/subtractor" }

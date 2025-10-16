@@ -127,32 +127,13 @@ calculator/target/wasm32-wasip1/release/calculator.wasm
 ```
 
 ### 3) Command component
-Create a command-line component that exports `wasi:cli/run`. Scaffolding:
+Implement the `app` world in the `command` crate. This component should import the `calculator` interface and export `wasi:cli/run` to create a command-line interface.
 
-```bash
-# from repo root
-cargo component new command --command
-```
-
-In `command/Cargo.toml` point the component target to the app world from the calculator WIT and add the adder WIT as a dependency so the toolchain can resolve the world imports:
-
-```toml
-[package.metadata.component.target]
-path = "../wit/calculator/world.wit"
-world = "app"
-
-[package.metadata.component.target.dependencies]
-"docs:adder" = { path = "../wit/adder" }
-```
-
-Implement the CLI in `command/src/main.rs`:
-- Parse three args: `<x> <y> <op-name>` (e.g., `1 2 add`)
-- Convert `op-name` to the `op` enum (support `add`)
-- Call `calculate::eval_expression(op, x, y)` (the generated binding)
-
-Then build:
+High-level steps:
 ```bash
 cd command
+# ensure command crate references the calculator WIT under package.metadata.component.target
+# implement the CLI logic in src/main.rs using the generated bindings
 cargo component build --release
 ```
 

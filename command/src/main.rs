@@ -8,6 +8,7 @@ use bindings::docs::calculator::{calculate, calculate::Op};
 fn parse_operator(op: &str) -> anyhow::Result<Op> {
     match op {
         "add" => Ok(Op::Add),
+        "subtract" => Ok(Op::Subtract),
         _ => anyhow::bail!("Unknown operation: {}", op),
     }
 }
@@ -16,6 +17,7 @@ impl fmt::Display for Op {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Op::Add => write!(f, "+"),
+            Op::Subtract => write!(f, "-"),
         }
     }
 }

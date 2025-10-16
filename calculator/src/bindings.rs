@@ -30,6 +30,32 @@ pub mod docs {
             }
         }
     }
+    pub mod subtractor {
+        #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+        pub mod subtract {
+            #[used]
+            #[doc(hidden)]
+            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            use super::super::super::_rt;
+            #[allow(unused_unsafe, clippy::all)]
+            pub fn subtract(x: u32, y: u32) -> u32 {
+                unsafe {
+                    #[cfg(target_arch = "wasm32")]
+                    #[link(wasm_import_module = "docs:subtractor/subtract@0.1.0")]
+                    unsafe extern "C" {
+                        #[link_name = "subtract"]
+                        fn wit_import0(_: i32, _: i32) -> i32;
+                    }
+                    #[cfg(not(target_arch = "wasm32"))]
+                    unsafe extern "C" fn wit_import0(_: i32, _: i32) -> i32 {
+                        unreachable!()
+                    }
+                    let ret = unsafe { wit_import0(_rt::as_i32(&x), _rt::as_i32(&y)) };
+                    ret as u32
+                }
+            }
+        }
+    }
 }
 #[rustfmt::skip]
 #[allow(dead_code, clippy::all)]
@@ -46,6 +72,7 @@ pub mod exports {
                 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
                 pub enum Op {
                     Add,
+                    Subtract,
                 }
                 impl ::core::fmt::Debug for Op {
                     fn fmt(
@@ -54,6 +81,7 @@ pub mod exports {
                     ) -> ::core::fmt::Result {
                         match self {
                             Op::Add => f.debug_tuple("Op::Add").finish(),
+                            Op::Subtract => f.debug_tuple("Op::Subtract").finish(),
                         }
                     }
                 }
@@ -65,6 +93,7 @@ pub mod exports {
                         }
                         match val {
                             0 => Op::Add,
+                            1 => Op::Subtract,
                             _ => panic!("invalid enum discriminant"),
                         }
                     }
@@ -206,14 +235,15 @@ pub(crate) use __export_calculator_impl as export;
 )]
 #[doc(hidden)]
 #[allow(clippy::octal_escapes)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 308] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xb3\x01\x01A\x02\x01\
-A\x04\x01B\x02\x01@\x02\x01xy\x01yy\0y\x04\0\x03add\x01\0\x03\0\x14docs:adder/ad\
-d@0.1.0\x05\0\x01B\x04\x01m\x01\x03add\x04\0\x02op\x03\0\0\x01@\x03\x02op\x01\x01\
-xy\x01yy\0y\x04\0\x0feval-expression\x01\x02\x04\0\x1fdocs:calculator/calculate@\
-0.1.0\x05\x01\x04\0\x20docs:calculator/calculator@0.1.0\x04\0\x0b\x10\x01\0\x0ac\
-alculator\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.\
-227.1\x10wit-bindgen-rust\x060.41.0";
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 379] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xfa\x01\x01A\x02\x01\
+A\x06\x01B\x02\x01@\x02\x01xy\x01yy\0y\x04\0\x03add\x01\0\x03\0\x14docs:adder/ad\
+d@0.1.0\x05\0\x01B\x02\x01@\x02\x01xy\x01yy\0y\x04\0\x08subtract\x01\0\x03\0\x1e\
+docs:subtractor/subtract@0.1.0\x05\x01\x01B\x04\x01m\x02\x03add\x08subtract\x04\0\
+\x02op\x03\0\0\x01@\x03\x02op\x01\x01xy\x01yy\0y\x04\0\x0feval-expression\x01\x02\
+\x04\0\x1fdocs:calculator/calculate@0.1.0\x05\x02\x04\0\x20docs:calculator/calcu\
+lator@0.1.0\x04\0\x0b\x10\x01\0\x0acalculator\x03\0\0\0G\x09producers\x01\x0cpro\
+cessed-by\x02\x0dwit-component\x070.227.1\x10wit-bindgen-rust\x060.41.0";
 #[inline(never)]
 #[doc(hidden)]
 pub fn __link_custom_section_describing_imports() {
