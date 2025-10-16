@@ -1,6 +1,6 @@
 # WebAssembly Component Tutorial
 
-This tutorial walks you through building, composing, and running a small component-model calculator example. The example uses four components:
+This tutorial walks you through building, composing, and running a small WebAssembly component-model calculator example. The example uses four components:
 
 - An addition operation (adder)
 - A subtraction operation (subtractor)
