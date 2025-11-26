@@ -1,20 +1,15 @@
 # WebAssembly Component Tutorial
-
 This tutorial walks you through building, composing, and running a small WebAssembly component-model calculator example. The example uses four components:
-
 - An addition operation (adder)
 - A subtraction operation (subtractor)
 - A calculator engine (calculator) that imports adder
 - A command-line interface (command) that imports calculator and exports `wasi:cli/run`
-
 We'll build each component, compose them into a single runnable component with `wac`, and execute it with `wasmtime`.
 
----
+<br>
 
-## Prerequisites
-
+# Prerequisites
 Install these tools on your machine:
-
 - Rust toolchain (rustup + cargo)
   - If needed: https://rustup.rs
 - cargo-component
@@ -25,12 +20,10 @@ Install these tools on your machine:
   - `curl https://wasmtime.dev/install.sh -sSf | bash`
   - After installing wasmtime you may need to close and reopen your shell so the `wasmtime` binary is on your PATH.
 
----
+<br>
 
-## Project layout (where files live)
-
+# Project layout (where files live)
 The example layout:
-
 ```
 .
 ├── adder
@@ -47,12 +40,10 @@ The example layout:
   └── subtractor/world.wit
 ```
 
----
+<br>
 
-## WIT interfaces
-
+# WIT interfaces
 Put these WIT packages under `wit/`:
-
 - wit/adder/world.wit
 ```wit
 package docs:adder@0.1.0;
@@ -65,7 +56,6 @@ world adder {
     export add;
 }
 ```
-
 - wit/subtractor/world.wit
 ```wit
 package docs:subtractor@0.1.0;
@@ -78,7 +68,6 @@ world subtractor {
     export subtract;
 }
 ```
-
 - wit/calculator/world.wit
 ```wit
 package docs:calculator@0.1.0;
@@ -101,18 +90,17 @@ world app {
     import calculate;
 }
 ```
-
 These define:
 - `adder` world that exports a simple `add` function.
 - `subtractor` world that exports a simple `subtract` function.
 - `calculator` world that exports `calculate` and imports the `adder` world.
 - `app` world that imports `calculate` (used by the `command` component).
 
----
+<br>
 
-## Create components
+# Create Components
 
-### 1) Add component (adder)
+## 1) Add component (adder)
 Implement the `adder` world in the `adder` crate. This crate should implement the `add` function and be compiled as a component. With `cargo-component` you typically implement the Rust function and build with `cargo component build`.
 
 Example (high-level steps):
@@ -122,16 +110,13 @@ cd adder
 # implement the add logic in src/lib.rs per the language guide / wit-bindgen generated bindings
 cargo component build --release
 ```
-
 The produced component binary will be at:
 ```
 adder/target/wasm32-wasip1/release/adder.wasm
 ```
-
 (If you used a debug build, check the `debug` directory.)
 
-### 2) Subtract component (subtractor)
-
+## 2) Subtract component (subtractor)
 Implement the `subtractor` world in the `subtractor` crate. This crate should implement the `subtract` function and be compiled as a component. With `cargo-component` you typically implement the Rust function and build with `cargo component build`.
 
 High-level steps:
@@ -146,11 +131,10 @@ Output:
 subtractor/target/wasm32-wasip1/release/subtractor.wasm
 ```
 
-### 3) Calculator component
-
+## 3) Calculator component
 Implement the `calculator` world in the `calculator` crate. It should import the `adder` interface and call it when the `op` is `add`.
 
-### 4) Calculator component
+## 4) Calculator component
 Implement the `calculator` world in the `calculator` crate. It should import the `adder` interface and call it when the `op` is `add`.
 
 High-level steps:
@@ -166,7 +150,7 @@ Output:
 calculator/target/wasm32-wasip1/release/calculator.wasm
 ```
 
-### 5) Command component
+## 5) Command component
 Implement the `app` world in the `command` crate. This component should import the `calculator` interface and export `wasi:cli/run` to create a command-line interface.
 
 High-level steps:
@@ -182,14 +166,12 @@ Output:
 command/target/wasm32-wasip1/release/command.wasm
 ```
 
----
+<br>
 
 ## Compose components with wac
-
 Now we plug components together so every import is satisfied and produce one final runnable component.
 
 From the repository root run:
-
 ```bash
 # compose calculator + adder + subtractor -> composed.wasm
 wac plug calculator/target/wasm32-wasip1/release/calculator.wasm \
@@ -202,28 +184,31 @@ wac plug command/target/wasm32-wasip1/release/command.wasm \
   --plug composed.wasm \
   -o final.wasm
 ```
-
 What these commands do:
 - The first `wac plug` satisfies the calculator's import of the adder.
 - The second `wac plug` satisfies the command's import of the calculator and yields a component with `wasi:cli/run` export.
 
----
+<br>
 
-## Run the composed component
-
+# Run the composed component
 Run the final component using `wasmtime`:
-
 ```bash
 wasmtime run final.wasm -- 1 2 add
 wasmtime run final.wasm -- 5 3 subtract
 ```
-
 Expected output:
 ```
 1 + 2 = 3
 5 - 3 = 2
 ```
 
+<br>
+
 Notes:
 - The `--` separates wasmtime flags from arguments passed to the component.
 - Make sure you have a recent `wasmtime` release with component model support.
+
+<br>
+
+# License
+[MIT](https://github.com/mytechnotalent/webassembly-component-tutorial/blob/main/LICENSE)
