@@ -22,7 +22,7 @@ Install these tools on your machine:
 
 <br>
 
-# Project layout (where files live)
+# Project Layout
 The example layout:
 ```
 .
@@ -42,7 +42,7 @@ The example layout:
 
 <br>
 
-# WIT interfaces
+# WIT Interfaces
 Put these WIT packages under `wit/`:
 - wit/adder/world.wit
 ```wit
@@ -100,7 +100,7 @@ These define:
 
 # Create Components
 
-## 1) Add component (adder)
+## 1) Add Component (adder)
 Implement the `adder` world in the `adder` crate. This crate should implement the `add` function and be compiled as a component. With `cargo-component` you typically implement the Rust function and build with `cargo component build`.
 
 Example (high-level steps):
@@ -116,10 +116,10 @@ adder/target/wasm32-wasip1/release/adder.wasm
 ```
 (If you used a debug build, check the `debug` directory.)
 
-## 2) Subtract component (subtractor)
+## 2) Subtract Component (subtractor)
 Implement the `subtractor` world in the `subtractor` crate. This crate should implement the `subtract` function and be compiled as a component. With `cargo-component` you typically implement the Rust function and build with `cargo component build`.
 
-High-level steps:
+High-level Steps:
 ```bash
 cd subtractor
 # implement the subtract logic in src/lib.rs per the language guide / wit-bindgen generated bindings
@@ -131,13 +131,13 @@ Output:
 subtractor/target/wasm32-wasip1/release/subtractor.wasm
 ```
 
-## 3) Calculator component
+## 3) Calculator Component
 Implement the `calculator` world in the `calculator` crate. It should import the `adder` interface and call it when the `op` is `add`.
 
-## 4) Calculator component
+## 4) Calculator Component
 Implement the `calculator` world in the `calculator` crate. It should import the `adder` interface and call it when the `op` is `add`.
 
-High-level steps:
+High-level Steps:
 ```bash
 cd calculator
 # ensure calculator crate references the calculator WIT under package.metadata.component.target
@@ -150,10 +150,10 @@ Output:
 calculator/target/wasm32-wasip1/release/calculator.wasm
 ```
 
-## 5) Command component
+## 5) Command Component
 Implement the `app` world in the `command` crate. This component should import the `calculator` interface and export `wasi:cli/run` to create a command-line interface.
 
-High-level steps:
+High-level Steps:
 ```bash
 cd command
 # ensure command crate references the calculator WIT under package.metadata.component.target
@@ -168,7 +168,7 @@ command/target/wasm32-wasip1/release/command.wasm
 
 <br>
 
-## Compose components with wac
+## Compose Components w/ WAC
 Now we plug components together so every import is satisfied and produce one final runnable component.
 
 From the repository root run:
@@ -190,7 +190,7 @@ What these commands do:
 
 <br>
 
-# Run the composed component
+# Run Composed Component
 Run the final component using `wasmtime`:
 ```bash
 wasmtime run final.wasm -- 1 2 add
